@@ -27,6 +27,9 @@ map_in_modes(modes, "h", "j", opts)
 map_in_modes(modes, "J", "k", opts)
 map_in_modes(modes, "K", "l", opts)
 
+-- Save file in both normal and insert mode with Ctrl+S
+vim.keymap.set({ "n", "i" }, "<C-s>", "<Cmd>w<CR>", opts)
+
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
