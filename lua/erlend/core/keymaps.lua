@@ -30,6 +30,12 @@ map_in_modes(modes, "K", "l", opts)
 -- Save file in both normal and insert mode with Ctrl+S
 vim.keymap.set({ "n", "i" }, "<C-s>", "<Cmd>w<CR>", opts)
 
+-- Make various capitalized quit commands work
+vim.cmd("command! Q q")
+vim.cmd("command! Qa qa")
+vim.cmd("command! QA qa")
+vim.cmd("command! QAll qa")
+
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
