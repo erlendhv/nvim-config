@@ -36,6 +36,18 @@ vim.cmd("command! Qa qa")
 vim.cmd("command! QA qa")
 vim.cmd("command! QAll qa")
 
+-- Deleting word before cursor in insert mode with Ctrl+backspace
+vim.keymap.set("i", "<C-H>", "<C-w>", opts)
+
+-- Map Ctrl+z to undo in insert mode
+vim.keymap.set("i", "<C-z>", "<C-o>u", { noremap = true, desc = "Undo in insert mode" })
+
+-- Map Ctrl+r to redo in insert mode
+vim.keymap.set("i", "<C-r>", "<C-o><C-r>", { noremap = true, desc = "Redo in insert mode" })
+
+-- Map Ctrl+v to paste in insert mode
+-- vim.keymap.set("i", "<C-v>", "<C-r>+", { noremap = true, desc = "Paste from clipboard in insert mode" })
+
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
