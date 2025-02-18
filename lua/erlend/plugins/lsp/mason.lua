@@ -30,7 +30,7 @@ return {
 				-- "pyright",
 				"pylsp",
 				"eslint",
-				"clangd",
+				-- "clangd",
 			},
 		})
 

@@ -27,6 +27,12 @@ map_in_modes(modes, "h", "j", opts)
 map_in_modes(modes, "J", "k", opts)
 map_in_modes(modes, "K", "l", opts)
 
+-- Remap J to H (move to top of screen)
+vim.keymap.set("n", "J", "H", { noremap = true, silent = true })
+
+-- Remap H to J with one space in between (join lines)
+vim.keymap.set("n", "H", "J", { noremap = true, silent = true })
+
 -- Save file in both normal and insert mode with Ctrl+S
 vim.keymap.set({ "n", "i" }, "<C-s>", "<Cmd>w<CR>", opts)
 
