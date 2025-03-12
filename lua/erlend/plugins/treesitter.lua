@@ -21,9 +21,9 @@ return {
 				enable = true,
 			},
 			-- install language parser automatically
-			-- auto_install = {
-			--     enable = true,
-			-- }
+			auto_install = {
+				enable = true,
+			},
 			-- ensure these language parsers are installed
 			ensure_installed = {
 				"json",
@@ -51,6 +51,7 @@ return {
 				"python",
 				"sql",
 				"java",
+				"julia",
 			},
 			incremental_selection = {
 				enable = true,
