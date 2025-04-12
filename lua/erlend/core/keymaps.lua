@@ -51,6 +51,18 @@ vim.keymap.set("i", "<C-z>", "<C-o>u", { noremap = true, desc = "Undo in insert 
 -- Map Ctrl+r to redo in insert mode
 vim.keymap.set("i", "<C-r>", "<C-o><C-r>", { noremap = true, desc = "Redo in insert mode" })
 
+vim.keymap.set("n", "<C-f>", function()
+	-- Get the current word under cursor
+	local current_word = vim.fn.expand("<cword>")
+
+	-- Execute the search using * command (which searches for the word under cursor)
+	-- but without moving to the next match
+	vim.cmd([[execute "normal! *N"]])
+
+	-- Optional: Highlight all matches
+	vim.opt.hlsearch = true
+end, { noremap = true, silent = true, desc = "Search word under cursor" })
+
 -- Map Ctrl+v to paste in insert mode
 -- vim.keymap.set("i", "<C-v>", "<C-r>+", { noremap = true, desc = "Paste from clipboard in insert mode" })
 
