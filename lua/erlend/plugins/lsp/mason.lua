@@ -27,21 +27,24 @@ return {
 		mason_lspconfig.setup({
 			-- list of servers for mason to install
 			ensure_installed = {
-				-- "pyright",
+				-- "cssls",
+				-- "jsonls",
+				"biome",
+				-- "ts_ls",
+				"csharp_ls",
 				"pylsp",
-				"eslint",
-				-- "clangd",
 			},
 		})
 
 		mason_tool_installer.setup({
 			ensure_installed = {
+				"csharp_ls",
+				"biome",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
 				"isort", -- python formatter
 				"black", -- python formatter
 				"pylint", -- python linter
-				"eslint_d", -- js linter
 			},
 		})
 	end,
