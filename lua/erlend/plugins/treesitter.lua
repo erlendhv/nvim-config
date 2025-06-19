@@ -47,11 +47,13 @@ return {
 				"vimdoc",
 				"c",
 				"cpp",
+				"c_sharp",
 				"cmake",
 				"python",
 				"sql",
 				"java",
 				"julia",
+				"rust",
 			},
 			incremental_selection = {
 				enable = true,
