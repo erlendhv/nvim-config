@@ -30,6 +30,9 @@ map_in_modes(modes, "K", "l", opts)
 -- Remap J to H (move to top of screen)
 vim.keymap.set("n", "J", "H", { noremap = true, silent = true })
 
+-- Remap L (move to bottom of screen) to Ø
+vim.keymap.set("n", "Ø", "L", { noremap = true, silent = true, desc = "Move to bottom of screen" })
+
 -- Remap H to J with one space in between (join lines)
 vim.keymap.set("n", "H", "J", { noremap = true, silent = true })
 
@@ -63,18 +66,10 @@ vim.keymap.set("n", "<C-f>", function()
 	vim.opt.hlsearch = true
 end, { noremap = true, silent = true, desc = "Search word under cursor" })
 
--- Map Ctrl+v to paste in insert mode
--- vim.keymap.set("i", "<C-v>", "<C-r>+", { noremap = true, desc = "Paste from clipboard in insert mode" })
-
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
 -- Custom keybindings using your preferred keys (ctrl + jklp)
--- vim.api.nvim_set_keymap("n", "<M-j>", ":TmuxNavigateLeft<CR>", { silent = true, noremap = true })
--- vim.api.nvim_set_keymap("n", "<M-k>", ":TmuxNavigateDown<CR>", { silent = true, noremap = true })
--- vim.api.nvim_set_keymap("n", "<M-l>", ":TmuxNavigateUp<CR>", { silent = true, noremap = true })
--- vim.api.nvim_set_keymap("n", "<M-ø>", ":TmuxNavigateRight<CR>", { silent = true, noremap = true })
--- vim.api.nvim_set_keymap("n", "<M-p>", ":TmuxNavigateRight<CR>", { silent = true, noremap = true })
 vim.keymap.set("n", "<A-j>", ":<C-U>TmuxNavigateLeft<cr>", opts)
 vim.keymap.set("n", "<A-k>", ":<C-U>TmuxNavigateDown<cr>", opts)
 vim.keymap.set("n", "<A-l>", ":<C-U>TmuxNavigateUp<cr>", opts)
