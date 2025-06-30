@@ -66,6 +66,23 @@ vim.keymap.set("n", "<C-f>", function()
 	vim.opt.hlsearch = true
 end, { noremap = true, silent = true, desc = "Search word under cursor" })
 
+-- Remap search and replace for the word under cursor
+vim.keymap.set("n", "<leader>rc", function()
+	local current_word = vim.fn.expand("<cword>")
+	if current_word == "" then
+		print("No word under cursor.")
+		return
+	end
+	local new_word = vim.fn.input("Replace '" .. current_word .. "' with: ", current_word)
+	-- Proceed only if the user did not cancel the input (by pressing Esc)
+	-- and the new word is not empty.
+	if new_word and new_word ~= "" then
+		-- Note the added "%" as the first argument to string.format
+		local cmd = string.format("%%s/\\<%s\\>/%s/gc", current_word, new_word)
+		vim.cmd(cmd)
+	end
+end, { desc = "Replace word under cursor (global with confirmation)" })
+
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
@@ -88,7 +105,7 @@ keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) 
 keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
 keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
 
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
+keymap.set("n", "<leader>tc", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
 keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
 keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
