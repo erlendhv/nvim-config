@@ -32,7 +32,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		-- Set keymaps only for the attached buffer
 		opts.desc = "Show documentation for what is under cursor"
-		keymap.set("n", "K", vim.lsp.buf.hover, opts)
+		keymap.set("n", "gk", vim.lsp.buf.hover, opts)
 
 		opts.desc = "Go to declaration"
 		keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
