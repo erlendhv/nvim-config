@@ -1,7 +1,7 @@
 -- File: lua/autocmds.lua
 local indent_group = vim.api.nvim_create_augroup("IndentSettings", { clear = true })
 
-local four_space_languages = { "python", "lua", "c", "cpp", "rust", "go", "csharp" }
+local four_space_languages = { "python", "lua", "c", "cpp", "rust", "go" }
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = indent_group,
@@ -69,16 +69,33 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		opts.desc = "Restart LSP"
 		keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
-
-		-- Specific handling for format on save, if the server supports it
-		-- if has_capability("textDocument/formatting") then
-		-- 	-- Create a separate autocmd for format on save
-		-- 	vim.api.nvim_create_autocmd("BufWritePre", {
-		-- 		buffer = bufnr,
-		-- 		callback = function()
-		-- 			vim.lsp.buf.format({ bufnr = bufnr, async = true })
-		-- 		end,
-		-- 	})
-		-- end
 	end,
 })
+
+-- vim.opt.autoread = true
+-- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+-- 	pattern = "*",
+-- 	callback = function()
+-- 		if vim.fn.mode() ~= "c" then
+-- 			vim.cmd("checktime")
+-- 		end
+-- 	end,
+-- })
+
+-- vim.opt.autoread = true
+--
+-- -- Simple test version
+-- vim.api.nvim_create_autocmd("FocusGained", {
+-- 	callback = function()
+-- 		print("Focus gained - checking files") -- Debug message
+-- 		vim.cmd("checktime")
+-- 	end,
+-- })
+
+-- vim.opt.autoread = true
+--
+-- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+-- 	callback = function()
+-- 		vim.cmd("silent! checktime")
+-- 	end,
+-- })

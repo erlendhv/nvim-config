@@ -31,14 +31,14 @@ return {
 				-- "jsonls",
 				"biome",
 				-- "ts_ls",
-				"csharp_ls",
+				-- "csharp_ls",
 				"pylsp",
 			},
 		})
 
 		mason_tool_installer.setup({
 			ensure_installed = {
-				"csharp_ls",
+				-- "csharp_ls",
 				"biome",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
