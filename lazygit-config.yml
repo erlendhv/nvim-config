@@ -1,0 +1,7 @@
+# Move file to ~/.config/lazygit and rename file to config.yml
+keybinding:
+  universal:
+    prevItem-alt: l
+    nextItem-alt: k
+    prevBlock-alt: j
+    nextBlock-alt: ø
