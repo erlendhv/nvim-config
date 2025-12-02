@@ -1,5 +1,6 @@
 -- set leader key to space
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 local keymap = vim.keymap -- for conciseness
 
@@ -112,3 +113,56 @@ keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) 
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
 
 vim.keymap.set("n", "<leader>rr", "<cmd>checktime<cr>", { desc = "Reload files" })
+
+vim.keymap.set("n", "<leader>cc", "<cmd>ClaudeCode<CR>", { desc = "Toggle Claude Code" })
+
+-- This function toggles a buffer-local "visual wrap" mode
+local function toggle_visual_wrap_local()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local modes = { "n", "v", "o" } -- Normal, Visual, Operator-pending
+
+	-- Check the buffer-local 'wrap' setting
+	if vim.opt_local.wrap:get() == true then
+		--
+		-- STATE IS ON: Turn it OFF
+		--
+		vim.opt_local.wrap = false
+		vim.opt_local.linebreak = false
+		print("Visual Wrap Mode: OFF")
+
+		-- Delete the buffer-local visual mappings to restore global defaults
+		for _, mode in ipairs(modes) do
+			vim.keymap.del(mode, "k", { buffer = bufnr })
+			vim.keymap.del(mode, "l", { buffer = bufnr })
+			vim.keymap.del(mode, "h", { buffer = bufnr })
+		end
+		vim.keymap.del("n", "J", { buffer = bufnr })
+	else
+		--
+		-- STATE IS OFF: Turn it ON
+		--
+		vim.opt_local.wrap = true
+		vim.opt_local.linebreak = true
+		print("Visual Wrap Mode: ON")
+
+		-- Create new buffer-local mappings for visual movement
+		-- These will override your global (logical) mappings for this buffer only
+		local opts = { buffer = bufnr, remap = false }
+
+		for _, mode in ipairs(modes) do
+			opts.desc = "Visual Down"
+			vim.keymap.set(mode, "k", "gj", opts) -- Your 'k' (down) becomes 'gj'
+			opts.desc = "Visual Up"
+			vim.keymap.set(mode, "l", "gk", opts) -- Your 'l' (up) becomes 'gk'
+			opts.desc = "Visual Down"
+			vim.keymap.set(mode, "h", "gj", opts) -- Your 'h' (down) becomes 'gj'
+		end
+
+		-- Your 'J' (up) becomes 'gk' (only in Normal mode)
+		opts.desc = "Visual Up"
+		vim.keymap.set("n", "J", "gk", opts)
+	end
+end
+
+-- Create the keymap to trigger the toggle function
+vim.keymap.set("n", "<leader>wl", toggle_visual_wrap_local, { desc = "Toggle Visual Wrap (Current Buffer)" })
