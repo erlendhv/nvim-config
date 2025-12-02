@@ -69,5 +69,17 @@ return {
 		)
 		keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" })
 		keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" })
+
+		-- Toggle between normal and wide width
+		local is_wide = false
+		keymap.set("n", "<leader>ew", function()
+			if is_wide then
+				api.tree.resize({ width = 35 })
+				is_wide = false
+			else
+				api.tree.resize({ width = 55 })
+				is_wide = true
+			end
+		end, { desc = "Toggle file explorer width" })
 	end,
 }
