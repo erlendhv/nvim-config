@@ -5,3 +5,9 @@ keybinding:
     nextItem-alt: k
     prevBlock-alt: j
     nextBlock-alt: ø
+
+customCommands:
+  - key: 'V'
+    context: 'files'
+    command: 'code --goto {{.SelectedFile.Name}}'
+    description: 'Open in VS Code'
