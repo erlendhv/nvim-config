@@ -15,6 +15,9 @@ Configuration files for Neovim, Tmux, and Zsh.
 | ripgrep | Telescope live grep |
 | fd | Telescope file finder |
 | lazygit | Git TUI |
+| eza | Modern ls replacement with icons |
+| zoxide | Smarter cd command |
+| fzf | Fuzzy finder |
 | A Nerd Font | Icons in terminal/nvim/tmux |
 
 ### Optional Tools
@@ -72,10 +75,26 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 # Download from: https://github.com/jesseduffield/lazygit/releases
 # Extract and move to /usr/local/bin
 
-# 9. Optional: Install Node.js (via nvm) for Copilot
+# 9. Install eza (modern ls replacement)
+sudo apt install -y gpg
+sudo mkdir -p /etc/apt/keyrings
+wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list
+sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+sudo apt update
+sudo apt install -y eza
+
+# 10. Install zoxide (smarter cd)
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+
+# 11. Install fzf (fuzzy finder)
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+# 12. Optional: Install Node.js (via nvm) for Copilot
 # See: https://github.com/nvm-sh/nvm#installing-and-updating
 
-# 10. Optional: Install LaTeX tools
+# 13. Optional: Install LaTeX tools
 sudo apt install -y texlive-full latexmk zathura
 ```
 
@@ -86,7 +105,7 @@ sudo apt install -y texlive-full latexmk zathura
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # 2. Install core packages
-brew install zsh tmux git neovim ripgrep fd lazygit
+brew install zsh tmux git neovim ripgrep fd lazygit eza zoxide fzf
 
 # 3. Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -128,6 +147,10 @@ cp ~/.config/nvim/.zshrc ~/.zshrc
 # Copy tmux config
 cp ~/.config/nvim/.tmux.conf ~/.tmux.conf
 
+# Copy eza theme
+mkdir -p ~/.config/eza
+cp ~/.config/nvim/eza/theme.yml ~/.config/eza/theme.yml
+
 # Set zsh as default shell
 chsh -s $(which zsh)
 ```
@@ -163,6 +186,7 @@ Lazy.nvim will automatically install plugins on first launch. Mason will auto-in
 | `.zshrc` | `~/.zshrc` |
 | `.tmux.conf` | `~/.tmux.conf` |
 | `init.lua` + `lua/` | `~/.config/nvim/` |
+| `eza/theme.yml` | `~/.config/eza/theme.yml` |
 
 ---
 
@@ -171,3 +195,6 @@ Lazy.nvim will automatically install plugins on first launch. Mason will auto-in
 - The `.tmux.conf` uses `xclip` for clipboard on Linux. On macOS it uses `pbcopy` - see comments in file.
 - Tmux keybindings use Norwegian keyboard layout (ø key). Adjust if needed.
 - Mason auto-installs: biome, pylsp, prettier, stylua, isort, black, pylint.
+- zoxide uses `j` command instead of `z` (e.g., `j projects` to jump to a directory).
+- fzf uses custom vim-style bindings: `Ctrl+k` = down, `Ctrl+l` = up.
+- Completion menu navigation uses `Ctrl+jklø` for vim-style movement.

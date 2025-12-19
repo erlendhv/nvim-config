@@ -57,14 +57,19 @@ else
     # CUDA paths (uncomment if using CUDA)
     # export PATH=/usr/local/cuda-12.6/bin:$PATH
     # export LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64:$LD_LIBRARY_PATH
+
+    # Local bin path (for tools like zoxide)
+    export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # ============================================================================
 # Aliases
 # ============================================================================
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# eza aliases (modern ls replacement with icons and git integration)
+alias ls='eza --icons --group-directories-first'
+alias ll='eza -l -a --icons --git --header --group-directories-first'
+alias la='eza -A --icons --group-directories-first'
+alias l='eza --icons --classify --group-directories-first'
 
 # Alert alias for long running commands (Linux with notify-send)
 # Usage: sleep 10; alert
@@ -101,6 +106,31 @@ export NVM_DIR="$HOME/.nvm"
 #     *:$HOME/.juliaup/bin:*) ;;
 #     *) export PATH="$HOME/.juliaup/bin${PATH:+:${PATH}}" ;;
 # esac
+
+# ============================================================================
+# fzf (Fuzzy Finder)
+# ============================================================================
+# Custom vim-style bindings (ctrl+k=down, ctrl+l=up)
+export FZF_DEFAULT_OPTS="--bind 'ctrl-k:down,ctrl-l:up'"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# ============================================================================
+# zoxide (Smarter cd)
+# ============================================================================
+# Use 'j' command instead of 'z' for jumping to directories
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh --cmd j)"
+fi
+
+# ============================================================================
+# Completion Menu Navigation
+# ============================================================================
+# Vim-style navigation in completion menus (Ctrl + jklø)
+zmodload zsh/complist
+bindkey -M menuselect '^j' backward-char        # Ctrl+j = left
+bindkey -M menuselect '^k' down-line-or-history # Ctrl+k = down
+bindkey -M menuselect '^l' up-line-or-history   # Ctrl+l = up
+bindkey -M menuselect ';' forward-char          # Ctrl+ø (produces ;) = right
 
 # ============================================================================
 # Powerlevel10k Configuration

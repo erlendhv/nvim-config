@@ -1,0 +1,24 @@
+filekinds:
+  normal:
+    foreground: White
+  directory:
+    foreground: Cyan
+  symlink:
+    foreground: Magenta
+  executable:
+    foreground: Green
+
+date:
+  foreground: Cyan
+
+git:
+  new:
+    foreground: Green
+  modified:
+    foreground: Yellow
+  deleted:
+    foreground: Red
+  renamed:
+    foreground: Cyan
+  ignored:
+    foreground: White
