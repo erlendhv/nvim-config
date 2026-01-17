@@ -45,7 +45,7 @@ I prefer an interactive, educational approach over getting complete solutions ha
 
 ### Code Style Preferences
 
-- **Never use inline imports** - always put imports at the top of the file
+- **Prefer imports at top of file** - unless there's a specific reason (e.g., avoiding circular imports, lazy loading)
 - **Comments above code, not inline** - place comments on the line above the code they describe, unless inline is clearly cleaner for short annotations
 - **Prioritize readability** - avoid clever one-liners, chained methods, or "fancy" functions when a straightforward approach is clearer
 - **Keep code modular** - break functionality into small, focused functions/modules with single responsibilities
@@ -58,14 +58,3 @@ I prefer an interactive, educational approach over getting complete solutions ha
 4. You propose a plan with steps
 5. We implement step by step, with check-ins
 6. You explain each piece as we build it
-
-### Project Setup
-
-**IMPORTANT: On session start, ALWAYS immediately check for project CLAUDE.md before any other response.**
-
-At the start of a session, if the project (git root) does not have a `CLAUDE.md` or `.claude/CLAUDE.md`:
-1. Check if `.claude/.no-project-instructions` exists at the git root
-2. If the marker file exists: proceed normally without asking
-3. If no marker file: ask me once if I want to create a project-specific CLAUDE.md
-   - If I say **yes**: help me create one tailored to that project
-   - If I say **no**: create an empty `.claude/.no-project-instructions` file and don't ask again
