@@ -1,4 +1,7 @@
-# Move file to ~/.config/lazygit and rename file to config.yml
+# Copy this file to your lazygit config directory, renamed to config.yml:
+#   Linux:  ~/.config/lazygit/config.yml
+#   macOS:  ~/Library/Application Support/lazygit/config.yml
+# (run `lazygit --print-config-dir` to confirm the exact path for your setup)
 keybinding:
   universal:
     prevItem-alt: l

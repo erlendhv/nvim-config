@@ -1,0 +1,3 @@
+# Stray binaries from extracting release tarballs during setup (e.g. lazygit)
+# should never end up committed here -- this repo is config, not binaries.
+/lazygit

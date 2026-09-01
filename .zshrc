@@ -24,7 +24,7 @@ source $ZSH/oh-my-zsh.sh
 # ============================================================================
 # Start tmux when the terminal is started
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ (screen|tmux) ]] && [ -z "$TMUX" ]; then
-    [ -z "$(tmux list-sessions 2>/dev/null)" ] && exec tmux || echo "Tmux session exists. Start manually if needed."
+    [ -z "$(tmux list-sessions 2>/dev/null)" ] && tmux || echo "Tmux session exists. Start manually if needed."
 fi
 
 # ============================================================================
@@ -57,10 +57,11 @@ else
     # CUDA paths (uncomment if using CUDA)
     # export PATH=/usr/local/cuda-12.6/bin:$PATH
     # export LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64:$LD_LIBRARY_PATH
-
-    # Local bin path (for tools like zoxide)
-    export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# Local bin path (pip/pipx --user installs, e.g. some Python formatters/linters,
+# land here on both Linux and macOS)
+export PATH="$HOME/.local/bin:$PATH"
 
 # ============================================================================
 # Aliases
@@ -70,6 +71,8 @@ alias ls='eza --icons --group-directories-first'
 alias ll='eza -l -a --icons --git --header --group-directories-first'
 alias la='eza -A --icons --group-directories-first'
 alias l='eza --icons --classify --group-directories-first'
+
+alias python='python3'
 
 # Alert alias for long running commands (Linux with notify-send)
 # Usage: sleep 10; alert
@@ -96,10 +99,10 @@ spython() {
 # ============================================================================
 # Development Tools
 # ============================================================================
-# Node Version Manager (NVM)
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# Node Version Manager (fnm)
+if command -v fnm &> /dev/null; then
+    eval "$(fnm env --use-on-cd --resolve-engines)"
+fi
 
 # Julia (via juliaup) - uncomment if using Julia
 # case ":$PATH:" in
@@ -112,7 +115,12 @@ export NVM_DIR="$HOME/.nvm"
 # ============================================================================
 # Custom vim-style bindings (ctrl+k=down, ctrl+l=up)
 export FZF_DEFAULT_OPTS="--bind 'ctrl-k:down,ctrl-l:up'"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Shell key bindings and fuzzy completion (fzf 0.48+, works regardless of
+# how fzf was installed -- brew, apt, or the classic git-clone method)
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh)
+fi
 
 # ============================================================================
 # zoxide (Smarter cd)

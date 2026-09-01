@@ -87,11 +87,25 @@ end, { desc = "Replace word under cursor (global with confirmation)" })
 -- Disable the default keybindings first
 vim.g.tmux_navigator_no_mappings = 1
 
--- Custom keybindings using your preferred keys (ctrl + jklp)
-vim.keymap.set("n", "<A-j>", ":<C-U>TmuxNavigateLeft<cr>", opts)
-vim.keymap.set("n", "<A-k>", ":<C-U>TmuxNavigateDown<cr>", opts)
-vim.keymap.set("n", "<A-l>", ":<C-U>TmuxNavigateUp<cr>", opts)
-vim.keymap.set("n", "<A-ø>", ":<C-U>TmuxNavigateRight<cr>", opts)
+-- Tmux-navigator keys differ by OS:
+-- - macOS: Ghostty translates Cmd+j/k/l/ø into standard Meta+h/j/k/l before
+--   the terminal ever sees it (Cmd and ø can't be sent as clean escape codes
+--   on Mac), so nvim/tmux just use the normal hjkl scheme here.
+-- - Linux: Alt+j/k/l/ø reaches the terminal directly with no translation
+--   layer, so the jklø remap has to happen here instead.
+-- .tmux.conf's @vim_navigator_mapping_* has to stay in sync with whichever
+-- of these is active.
+if vim.fn.has("mac") == 1 then
+	vim.keymap.set("n", "<M-h>", ":<C-U>TmuxNavigateLeft<cr>", opts)
+	vim.keymap.set("n", "<M-j>", ":<C-U>TmuxNavigateDown<cr>", opts)
+	vim.keymap.set("n", "<M-k>", ":<C-U>TmuxNavigateUp<cr>", opts)
+	vim.keymap.set("n", "<M-l>", ":<C-U>TmuxNavigateRight<cr>", opts)
+else
+	vim.keymap.set("n", "<A-j>", ":<C-U>TmuxNavigateLeft<cr>", opts)
+	vim.keymap.set("n", "<A-k>", ":<C-U>TmuxNavigateDown<cr>", opts)
+	vim.keymap.set("n", "<A-l>", ":<C-U>TmuxNavigateUp<cr>", opts)
+	vim.keymap.set("n", "<A-ø>", ":<C-U>TmuxNavigateRight<cr>", opts)
+end
 
 -- clear search highlights
 keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })

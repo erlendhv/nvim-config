@@ -4,8 +4,9 @@ return {
 	-- We lazy-load on the 'tex' filetype
 	ft = { "tex", "latex", "bib" },
 	init = function()
-		-- This is the minimal config to get Zathura working
-		vim.g.vimtex_view_method = "zathura"
+		-- Zathura (Linux) is X11/GTK-based and awkward to run on macOS, so use
+		-- Skim there instead -- macOS's native PDF viewer with SyncTeX support.
+		vim.g.vimtex_view_method = vim.fn.has("mac") == 1 and "skim" or "zathura"
 
 		-- This line enables continuous compilation
 		-- It will start 'latexmk -pvc' when you start compilation
