@@ -44,7 +44,6 @@ return {
 			hi! DiagnosticUnderlineHint  guisp=#C678DD gui=undercurl
 		]])
 
-		local lspconfig = require("lspconfig")
 		local mason_lspconfig = require("mason-lspconfig")
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
@@ -52,46 +51,42 @@ return {
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		-- -- Setup signs for diagnostics
-		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
+		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
 			vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 		end
 
-		mason_lspconfig.setup({
-			handlers = {
-				-- The default handler for all servers
-				function(server_name)
-					lspconfig[server_name].setup({
-						capabilities = capabilities,
-						-- NO on_attach needed here, the autocmd handles it!
-					})
-				end,
+		-- Note: mason-lspconfig's `setup({ handlers = ... })` option (the old way of
+		-- customizing servers) is no longer read by this version of the plugin -- it
+		-- auto-enables every installed server straight via vim.lsp.enable(). Per-server
+		-- customization now goes through vim.lsp.config() instead, which merges into
+		-- whatever config that server ends up starting with.
 
-				-- You can still have custom setups for specific servers
-				["lua_ls"] = function()
-					lspconfig["lua_ls"].setup({
-						capabilities = capabilities,
-						settings = {
-							Lua = {
-								diagnostics = { globals = { "vim" } },
-								completion = { callSnippet = "Replace" },
-							},
-						},
-					})
-				end,
-				["ts_ls"] = function()
-					lspconfig["ts_ls"].setup({
-						capabilities = capabilities,
-						-- This is the key: on_attach function to disable formatting
-						on_attach = function(client, bufnr)
-							-- Disable formatting from ts_ls because we want to use Biome for it
-							client.server_capabilities.documentFormattingProvider = false
-							client.server_capabilities.documentRangeFormattingProvider = false
-						end,
-					})
-				end,
+		-- Applies to every server ("*" is a wildcard base config)
+		vim.lsp.config("*", {
+			capabilities = capabilities,
+		})
+
+		vim.lsp.config("lua_ls", {
+			settings = {
+				Lua = {
+					diagnostics = { globals = { "vim" } },
+					completion = { callSnippet = "Replace" },
+				},
 			},
 		})
+
+		vim.lsp.config("ts_ls", {
+			-- Disable formatting from ts_ls because we want to use Biome for it
+			on_attach = function(client, bufnr)
+				client.server_capabilities.documentFormattingProvider = false
+				client.server_capabilities.documentRangeFormattingProvider = false
+			end,
+		})
+
+		-- automatic_enable (with the roslyn_ls exclude) is set once in mason.lua,
+		-- which loads before this file does -- see the comment there.
+		mason_lspconfig.setup({})
 	end,
 }

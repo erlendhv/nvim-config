@@ -34,6 +34,17 @@ return {
 				-- "csharp_ls",
 				"pylsp",
 			},
+			automatic_enable = {
+				-- roslyn.nvim already starts and manages the roslyn-language-server
+				-- binary (client name "roslyn"). Without this exclude, mason-lspconfig
+				-- auto-attaches it a second time as "roslyn_ls" (nvim-lspconfig's
+				-- built-in config for the same binary), duplicating every diagnostic.
+				-- This has to be set here rather than in lspconfig.lua's setup() call,
+				-- since this file loads eagerly and lspconfig.lua only loads on
+				-- BufReadPre -- by then vim.lsp.enable("roslyn_ls") would already have
+				-- run once and there's no un-enabling it after the fact.
+				exclude = { "roslyn_ls" },
+			},
 		})
 
 		mason_tool_installer.setup({

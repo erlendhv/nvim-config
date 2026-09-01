@@ -40,11 +40,12 @@ opt.foldenable = true
 opt.foldcolumn = "1"
 
 -- set foldmethod after ftplugins (they often override it)
+-- uses Neovim's native treesitter-based foldexpr (not provided by the nvim-treesitter plugin)
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "*",
 	callback = function()
 		vim.opt_local.foldmethod = "expr"
-		vim.opt_local.foldexpr = "nvim_treesitter#foldexpr()"
+		vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 	end,
 })
 
