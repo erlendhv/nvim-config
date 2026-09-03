@@ -22,3 +22,7 @@ I prefer an interactive, educational approach over getting complete solutions ha
 - **Comments above code, not inline** - place comments on the line above the code they describe, unless inline is clearly cleaner for short annotations
 - **Prioritize readability** - avoid clever one-liners, chained methods, or "fancy" functions when a straightforward approach is clearer
 - **Keep code modular** - break functionality into small, focused functions/modules with single responsibilities
+
+### Git Commit Preferences
+
+- **Never add "Co-Authored-By: Claude" (or similar) to commit messages**
