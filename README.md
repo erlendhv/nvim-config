@@ -26,7 +26,7 @@ Configuration files for Neovim, Tmux, and Zsh.
 
 | Tool | Purpose |
 |------|---------|
-| node/npm (via fnm) | Copilot, some LSPs |
+| node/npm (via fnm) | Some LSPs |
 | python3 | Python LSP, formatters |
 | dotnet SDK | Building/running C# projects (roslyn.nvim's LSP itself is installed separately via Mason) |
 | latexmk | LaTeX compilation (vimtex) |
@@ -107,7 +107,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # 13. Install python3 (usually already present, but formatters/linters need it)
 sudo apt install -y python3 python3-pip
 
-# 14. Optional: Install Node.js (via fnm) for Copilot
+# 14. Optional: Install Node.js (via fnm) for LSPs
 curl -fsSL https://fnm.vercel.app/install | bash
 
 # 15. Optional: Install LaTeX tools
@@ -232,13 +232,7 @@ Open tmux and press `Ctrl-a + I` to install plugins via TPM.
 
 Lazy.nvim will automatically install plugins on first launch. Mason will auto-install LSPs and formatters. On first parser install, `nvim-treesitter` will compile several Treesitter parsers -- this requires the `tree-sitter-cli` and C compiler from the Prerequisites step above; without them you'll see `tree-sitter build` errors during `:TSUpdate`/first launch.
 
-### 5. Configure Copilot (optional)
-
-```vim
-:Copilot setup
-```
-
-### 6. C#/.NET work (optional)
+### 5. C#/.NET work (optional)
 
 `roslyn.nvim` manages its own copy of the Roslyn language server via Mason (installed automatically as `roslyn-language-server` the first time you open a `.cs` file) -- you don't need to install it separately. You do need the .NET SDK itself installed system-wide to actually build/run/restore your projects (`dotnet build`, `dotnet run`, etc.).
 

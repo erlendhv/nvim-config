@@ -128,8 +128,6 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer
 
 vim.keymap.set("n", "<leader>rr", "<cmd>checktime<cr>", { desc = "Reload files" })
 
-vim.keymap.set("n", "<leader>cc", "<cmd>ClaudeCode<CR>", { desc = "Toggle Claude Code" })
-
 -- This function toggles a buffer-local "visual wrap" mode
 local function toggle_visual_wrap_local()
 	local bufnr = vim.api.nvim_get_current_buf()
