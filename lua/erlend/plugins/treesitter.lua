@@ -1,5 +1,6 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	branch = "main",
 	-- the "main" branch rewrite does not support lazy-loading
 	lazy = false,
 	build = ":TSUpdate",
