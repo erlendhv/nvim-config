@@ -141,6 +141,12 @@ bindkey -M menuselect '^l' up-line-or-history   # Ctrl+l = up
 bindkey -M menuselect ';' forward-char          # Ctrl+ø (produces ;) = right
 
 # ============================================================================
+# Machine-local Overrides
+# ============================================================================
+# Settings that only make sense on one machine (not tracked in git)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# ============================================================================
 # Powerlevel10k Configuration
 # ============================================================================
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

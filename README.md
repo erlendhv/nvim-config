@@ -61,8 +61,12 @@ sudo snap install nvim --classic
 # 3. Install the tree-sitter CLI (required to compile Treesitter parsers;
 # the apt package is usually too old -- prefer cargo or a prebuilt release)
 # See: https://github.com/tree-sitter/tree-sitter/blob/master/crates/cli/README.md
-cargo install tree-sitter-cli
-# or download a binary from https://github.com/tree-sitter/tree-sitter/releases
+# Prebuilt binary (no Rust toolchain needed) -- installs to ~/.local/bin,
+# which .zshrc puts on PATH:
+mkdir -p ~/.local/bin
+curl -fsSL https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-linux-x64.gz | gunzip > ~/.local/bin/tree-sitter
+chmod +x ~/.local/bin/tree-sitter
+# or, if you have Rust installed: cargo install tree-sitter-cli
 
 # 4. Install Oh My Zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -103,12 +107,19 @@ curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh 
 # 12. Install fzf (fuzzy finder) -- 0.48 or newer for the --zsh integration flag
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install --no-update-rc  # .zshrc already sources fzf itself, see below
+# --no-update-rc means ~/.fzf/bin is never added to PATH, so link it into
+# ~/.local/bin -- otherwise .zshrc's `command -v fzf` check silently skips fzf
+ln -sf ~/.fzf/bin/fzf ~/.local/bin/fzf
 
 # 13. Install python3 (usually already present, but formatters/linters need it)
 sudo apt install -y python3 python3-pip
 
 # 14. Optional: Install Node.js (via fnm) for LSPs
-curl -fsSL https://fnm.vercel.app/install | bash
+# --install-dir puts fnm on PATH (the default dir isn't, so .zshrc's
+# `command -v fnm` check would skip it); --skip-shell stops the installer from
+# appending to ~/.zshrc, which is a symlink into this repo
+curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.local/bin" --skip-shell
+fnm install --lts && fnm default lts-latest
 
 # 15. Optional: Install LaTeX tools
 sudo apt install -y texlive-full latexmk zathura
@@ -177,11 +188,14 @@ After cloning this repository:
 # Clone the repo
 git clone <repo-url> ~/.config/nvim
 
-# Copy shell config
-cp ~/.config/nvim/.zshrc ~/.zshrc
+# Symlink shell and tmux config (back up any existing files first) -- with
+# symlinks, a `git pull` is all it takes to bring a machine up to date
+mv ~/.zshrc ~/.zshrc.bak 2>/dev/null; ln -s ~/.config/nvim/.zshrc ~/.zshrc
+mv ~/.tmux.conf ~/.tmux.conf.bak 2>/dev/null; ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 
-# Copy tmux config
-cp ~/.config/nvim/.tmux.conf ~/.tmux.conf
+# Machine-specific shell settings (aliases, CUDA paths, etc.) go in
+# ~/.zshrc.local, which .zshrc sources at the end and git never sees
+touch ~/.zshrc.local
 
 # Copy eza theme
 mkdir -p ~/.config/eza
@@ -242,8 +256,9 @@ Lazy.nvim will automatically install plugins on first launch. Mason will auto-in
 
 | File | Destination |
 |------|-------------|
-| `.zshrc` | `~/.zshrc` |
-| `.tmux.conf` | `~/.tmux.conf` |
+| `.zshrc` | `~/.zshrc` (symlink) |
+| `.tmux.conf` | `~/.tmux.conf` (symlink) |
+| -- | `~/.zshrc.local` (machine-specific, not in repo) |
 | `init.lua` + `lua/` | `~/.config/nvim/` |
 | `eza/theme.yml` | `~/.config/eza/theme.yml` |
 | `lazygit-config.yml` | `~/.config/lazygit/config.yml` (Linux) or `~/Library/Application Support/lazygit/config.yml` (macOS) |
