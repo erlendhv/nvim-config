@@ -55,8 +55,7 @@ else
     [ -d "/opt/nvim-linux64/bin" ] && export PATH="$PATH:/opt/nvim-linux64/bin"
 
     # CUDA paths (uncomment if using CUDA)
-    # export PATH=/usr/local/cuda-12.6/bin:$PATH
-    # export LD_LIBRARY_PATH=/usr/local/cuda-12.6/lib64:$LD_LIBRARY_PATH
+    # export PATH=/usr/local/cuda/bin:$PATH
 fi
 
 # Local bin path (pip/pipx --user installs, e.g. some Python formatters/linters,
