@@ -28,6 +28,9 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 
 -- clipboard
 opt.clipboard:append("unnamedplus") -- use system clipboard as default register
+if vim.env.SSH_TTY then
+	vim.g.clipboard = "osc52"
+end
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
