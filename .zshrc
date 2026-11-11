@@ -98,6 +98,10 @@ spython() {
 # ============================================================================
 # Development Tools
 # ============================================================================
+# Default editor for git, crontab, sudoedit, etc.
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # Node Version Manager (fnm)
 if command -v fnm &> /dev/null; then
     eval "$(fnm env --use-on-cd --resolve-engines)"
