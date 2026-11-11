@@ -29,6 +29,7 @@ Configuration files for Neovim, Tmux, and Zsh.
 | node/npm (via fnm) | Some LSPs |
 | python3 | Python LSP, formatters |
 | dotnet SDK | Building/running C# projects (roslyn.nvim's LSP itself is installed separately via Mason) |
+| Rust (via rustup) | Rust toolchain + rust-analyzer LSP (installed via rustup, not Mason, so it matches the toolchain version) |
 | latexmk | LaTeX compilation (vimtex) |
 | zathura (Linux) / Skim (macOS) | PDF viewer for LaTeX |
 | xclip (Linux only) | Clipboard support -- macOS uses the built-in `pbcopy`, nothing to install |
@@ -126,6 +127,12 @@ sudo apt install -y texlive-full latexmk zathura
 
 # 16. Optional: Install the .NET SDK (for C# work, alongside roslyn.nvim)
 # See: https://learn.microsoft.com/en-us/dotnet/core/install/linux
+
+# 17. Optional: Install Rust (rustc, cargo, rustfmt, clippy) and rust-analyzer
+# The installer adds ~/.cargo/bin to PATH via ~/.zshenv and ~/.profile (not
+# in this repo) -- open a new terminal before running the second command
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup component add rust-analyzer
 ```
 
 ### macOS
@@ -176,6 +183,12 @@ brew install --cask skim   # macOS's native PDF viewer w/ SyncTeX, used
 
 # 11. Optional: Install the .NET SDK (for C# work, alongside roslyn.nvim)
 brew install --cask dotnet-sdk
+
+# 12. Optional: Install Rust (rustc, cargo, rustfmt, clippy) and rust-analyzer
+# The installer adds ~/.cargo/bin to PATH via ~/.zshenv and ~/.profile (not
+# in this repo) -- open a new terminal before running the second command
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+rustup component add rust-analyzer
 ```
 
 ---
@@ -248,7 +261,7 @@ Lazy.nvim will automatically install plugins on first launch. Mason will auto-in
 
 ### 5. C#/.NET work (optional)
 
-`roslyn.nvim` manages its own copy of the Roslyn language server via Mason (installed automatically as `roslyn-language-server` the first time you open a `.cs` file) -- you don't need to install it separately. You do need the .NET SDK itself installed system-wide to actually build/run/restore your projects (`dotnet build`, `dotnet run`, etc.).
+Mason installs the Roslyn language server (`roslyn-language-server`) on startup, and `roslyn.nvim` starts it when you open a `.cs` file -- you don't need to install it separately. You do need the .NET SDK itself installed system-wide: Mason installs the server through `dotnet` (without it, the install fails on every startup and C# has no LSP), and you need it to build/run/restore your projects (`dotnet build`, `dotnet run`, etc.).
 
 ---
 
@@ -269,7 +282,7 @@ Lazy.nvim will automatically install plugins on first launch. Mason will auto-in
 
 - `.tmux.conf` detects the OS automatically (via `if-shell` + `uname`) for both the clipboard command (`pbcopy` on macOS, `xclip` on Linux) and the tmux-navigator key scheme -- no manual editing needed after cloning.
 - Tmux/Neovim pane navigation and cursor movement use a Norwegian-keyboard-inspired `jklø` remap. The *physical* key you press is the same on both OSes (`Alt+j/k/l/ø` on Linux, `Cmd+j/k/l/ø` on macOS via Ghostty's translation, see Post-Installation above) -- `keymaps.lua` and `.tmux.conf` both detect the OS and wire up the resulting escape codes (`M-h/j/k/l` on macOS, `M-j/k/l/ø` on Linux) to match.
-- Mason auto-installs: biome, pylsp, prettier, stylua, isort, black, pylint. `roslyn-language-server` installs automatically the first time you open a `.cs` file.
+- Mason auto-installs on startup (list in `lua/erlend/plugins/lsp/mason.lua`): prettier, stylua, lua-language-server, typescript-language-server, oxlint, roslyn-language-server, ty, ruff. rust-analyzer comes from rustup instead (see the optional Rust install step).
 - zoxide uses `j` command instead of `z` (e.g., `j projects` to jump to a directory).
 - fzf uses custom vim-style bindings: `Ctrl+k` = down, `Ctrl+l` = up.
 - Completion menu navigation uses `Ctrl+jklø` for vim-style movement.
