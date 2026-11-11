@@ -7,16 +7,14 @@ return {
 	dependencies = {
 		{
 			"windwp/nvim-ts-autotag",
-			-- Initialize autotag directly here instead of inside treesitter
 			config = function()
 				require("nvim-ts-autotag").setup()
 			end,
 		},
 	},
 	config = function()
-		-- ensure these language parsers are installed
-		-- (no more "auto_install on open" like the old plugin - unlisted languages
-		-- won't get highlighting until added here)
+		-- No auto-install on the main branch: unlisted languages fall back to
+		-- Neovim's simpler regex highlighting until their parser is added here
 		local ensure_installed = {
 			"json",
 			"javascript",

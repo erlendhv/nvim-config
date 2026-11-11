@@ -15,13 +15,13 @@ return {
 				path_display = { "smart" },
 				mappings = {
 					i = {
-						["<C-l>"] = actions.move_selection_previous, -- move to prev result
-						["<C-k>"] = actions.move_selection_next, -- move to next result
+						["<C-l>"] = actions.move_selection_previous,
+						["<C-k>"] = actions.move_selection_next,
 						["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 					},
 					n = {
-						["<C-l>"] = actions.move_selection_previous, -- move to prev result
-						["<C-k>"] = actions.move_selection_next, -- move to next result
+						["<C-l>"] = actions.move_selection_previous,
+						["<C-k>"] = actions.move_selection_next,
 					},
 				},
 			},
@@ -29,8 +29,7 @@ return {
 
 		telescope.load_extension("fzf")
 
-		-- set keymaps
-		local keymap = vim.keymap -- for conciseness
+		local keymap = vim.keymap
 
 		keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
 		keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })

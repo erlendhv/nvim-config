@@ -3,9 +3,9 @@ return {
 	dependencies = "nvim-tree/nvim-web-devicons",
 	config = function()
 		local nvimtree = require("nvim-tree")
-		local api = require("nvim-tree.api") -- <-- This line is crucial for 'api' to be available
+		local api = require("nvim-tree.api")
 
-		-- recommended settings from nvim-tree documentation
+		-- Disable netrw (Vim's built-in file browser), nvim-tree replaces it
 		vim.g.loaded_netrw = 1
 		vim.g.loaded_netrwPlugin = 1
 
@@ -21,8 +21,8 @@ return {
 				icons = {
 					glyphs = {
 						folder = {
-							arrow_closed = "", -- arrow when folder is closed
-							arrow_open = "", -- arrow when folder is open
+							arrow_closed = "",
+							arrow_open = "",
 						},
 					},
 				},
@@ -42,11 +42,9 @@ return {
 			},
 		})
 
-		-- Autocmd to open nvim-tree on startup
-		-- This MUST be inside the 'config' function where 'api' is defined.
+		-- Open the tree on startup when no file was given, or a directory was
 		vim.api.nvim_create_autocmd({ "VimEnter" }, {
 			callback = function()
-				-- Only open if no file is explicitly opened, or if the current buffer is a directory.
 				local current_buffer_is_empty = vim.fn.empty(vim.fn.expand("%:p")) == 1
 				local current_buffer_is_directory = vim.fn.isdirectory(vim.fn.expand("%:p")) == 1
 
@@ -57,8 +55,7 @@ return {
 			group = vim.api.nvim_create_augroup("NvimTreeStartup", { clear = true }),
 		})
 
-		-- set keymaps
-		local keymap = vim.keymap -- for conciseness
+		local keymap = vim.keymap
 
 		keymap.set("n", "<leader>ee", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
 		keymap.set(
@@ -70,7 +67,6 @@ return {
 		keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" })
 		keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" })
 
-		-- Toggle between normal and wide width
 		local is_wide = false
 		keymap.set("n", "<leader>ew", function()
 			if is_wide then
