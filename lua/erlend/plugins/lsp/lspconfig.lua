@@ -77,6 +77,15 @@ return {
 			},
 		})
 
+		vim.lsp.config("rust_analyzer", {
+			settings = {
+				["rust-analyzer"] = {
+					check = { command = "clippy" },
+				},
+			},
+		})
+		vim.lsp.enable("rust_analyzer")
+
 		-- automatic_enable (with the roslyn_ls exclude) is set once in mason.lua,
 		-- which loads before this file does -- see the comment there.
 		mason_lspconfig.setup({})
