@@ -77,14 +77,6 @@ return {
 			},
 		})
 
-		vim.lsp.config("ts_ls", {
-			-- Disable formatting from ts_ls because we want to use Biome for it
-			on_attach = function(client, bufnr)
-				client.server_capabilities.documentFormattingProvider = false
-				client.server_capabilities.documentRangeFormattingProvider = false
-			end,
-		})
-
 		-- automatic_enable (with the roslyn_ls exclude) is set once in mason.lua,
 		-- which loads before this file does -- see the comment there.
 		mason_lspconfig.setup({})

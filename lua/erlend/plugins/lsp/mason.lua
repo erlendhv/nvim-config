@@ -25,15 +25,6 @@ return {
 		})
 
 		mason_lspconfig.setup({
-			-- list of servers for mason to install
-			ensure_installed = {
-				-- "cssls",
-				-- "jsonls",
-				-- "biome",
-				-- "ts_ls",
-				-- "csharp_ls",
-				-- "pylsp",
-			},
 			automatic_enable = {
 				-- roslyn.nvim already starts and manages the roslyn-language-server
 				-- binary (client name "roslyn"). Without this exclude, mason-lspconfig
@@ -49,13 +40,14 @@ return {
 
 		mason_tool_installer.setup({
 			ensure_installed = {
-				-- "csharp_ls",
-				-- "biome",
 				"prettier", -- prettier formatter
 				"stylua", -- lua formatter
-				-- "isort", -- python formatter
-				-- "black", -- python formatter
-				-- "pylint", -- python linter
+				"lua-language-server",
+				"typescript-language-server",
+				"oxlint",
+				"roslyn-language-server",
+				"ty",
+				"ruff",
 			},
 		})
 	end,
