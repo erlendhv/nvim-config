@@ -26,8 +26,8 @@ Configuration files for Neovim, Tmux, and Zsh.
 
 | Tool | Purpose |
 |------|---------|
-| node/npm (via fnm) | Some LSPs |
-| python3 | Python LSP, formatters |
+| node/npm (via fnm) | Mason installs prettier, oxlint and typescript-language-server through npm |
+| python3 | Mason installs ty (Python LSP) through pip |
 | dotnet SDK | Building/running C# projects (roslyn.nvim's LSP itself is installed separately via Mason) |
 | Rust (via rustup) | Rust toolchain + rust-analyzer LSP (installed via rustup, not Mason, so it matches the toolchain version) |
 | latexmk | LaTeX compilation (vimtex) |
@@ -112,7 +112,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # ~/.local/bin -- otherwise .zshrc's `command -v fzf` check silently skips fzf
 ln -sf ~/.fzf/bin/fzf ~/.local/bin/fzf
 
-# 13. Install python3 (usually already present, but formatters/linters need it)
+# 13. Install python3 (usually already present, but Mason needs it to install ty)
 sudo apt install -y python3 python3-pip
 
 # 14. Optional: Install Node.js (via fnm) for LSPs
@@ -206,6 +206,12 @@ git clone <repo-url> ~/.config/nvim
 mv ~/.zshrc ~/.zshrc.bak 2>/dev/null; ln -s ~/.config/nvim/.zshrc ~/.zshrc
 mv ~/.tmux.conf ~/.tmux.conf.bak 2>/dev/null; ln -s ~/.config/nvim/.tmux.conf ~/.tmux.conf
 
+# Symlink the global Claude Code instructions (the repo's root CLAUDE.md is
+# project-specific; the global one lives under claude/ so it isn't auto-loaded
+# twice)
+mkdir -p ~/.claude
+mv ~/.claude/CLAUDE.md ~/.claude/CLAUDE.md.bak 2>/dev/null; ln -s ~/.config/nvim/claude/global-CLAUDE.md ~/.claude/CLAUDE.md
+
 # Machine-specific shell settings (aliases, CUDA paths, etc.) go in
 # ~/.zshrc.local, which .zshrc sources at the end and git never sees
 touch ~/.zshrc.local
@@ -272,6 +278,7 @@ Mason installs the Roslyn language server (`roslyn-language-server`) on startup,
 | `.zshrc` | `~/.zshrc` (symlink) |
 | `.tmux.conf` | `~/.tmux.conf` (symlink) |
 | -- | `~/.zshrc.local` (machine-specific, not in repo) |
+| `claude/global-CLAUDE.md` | `~/.claude/CLAUDE.md` (symlink) |
 | `init.lua` + `lua/` | `~/.config/nvim/` |
 | `eza/theme.yml` | `~/.config/eza/theme.yml` |
 | `lazygit-config.yml` | `~/.config/lazygit/config.yml` (Linux) or `~/Library/Application Support/lazygit/config.yml` (macOS) |
@@ -280,7 +287,9 @@ Mason installs the Roslyn language server (`roslyn-language-server`) on startup,
 
 ## Notes
 
-- `.tmux.conf` detects the OS automatically (via `if-shell` + `uname`) for both the clipboard command (`pbcopy` on macOS, `xclip` on Linux) and the tmux-navigator key scheme -- no manual editing needed after cloning.
+- `.tmux.conf` detects the OS automatically (via `if-shell` + `uname`) for the clipboard command (`pbcopy` on macOS, `xclip` on Linux), the tmux-navigator key scheme, and the vertical split key (`prefix + '` on macOS, `prefix + |` on Linux) -- no manual editing needed after cloning.
+- The tmux session viewer (`prefix + s`) uses `jklø` too. tmux has no key table for it, so `j/k/l/ø` are bound in the root table and only translated while a pane is in tree mode; everywhere else they're passed through unchanged.
+- Workspace diagnostics (`<leader>xw` in Trouble) cover unopened files only where the language server supports it: ty and Roslyn run in whole-workspace/full-solution mode, rust-analyzer checks the whole crate, and lua_ls checks the workspace after a save. TypeScript and Ruff only report open files. Roslyn needs a few seconds after startup to load the solution.
 - Tmux/Neovim pane navigation and cursor movement use a Norwegian-keyboard-inspired `jklø` remap. The *physical* key you press is the same on both OSes (`Alt+j/k/l/ø` on Linux, `Cmd+j/k/l/ø` on macOS via Ghostty's translation, see Post-Installation above) -- `keymaps.lua` and `.tmux.conf` both detect the OS and wire up the resulting escape codes (`M-h/j/k/l` on macOS, `M-j/k/l/ø` on Linux) to match.
 - Mason auto-installs on startup (list in `lua/erlend/plugins/lsp/mason.lua`): prettier, stylua, lua-language-server, typescript-language-server, oxlint, roslyn-language-server, ty, ruff. rust-analyzer comes from rustup instead (see the optional Rust install step).
 - zoxide uses `j` command instead of `z` (e.g., `j projects` to jump to a directory).

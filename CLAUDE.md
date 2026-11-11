@@ -1,28 +1,31 @@
-# Global Claude Code Instructions
+# Dotfiles repo: Neovim, tmux, zsh
 
-## Interaction Style: Collaborative Learning
+## Mode
+Claude implements, on my instructions.
 
-I prefer an interactive, educational approach over getting complete solutions handed to me.
+## Layout
+- `init.lua` loads `lua/erlend/core/` (options, keymaps, autocmds), then `lua/erlend/lazy.lua` (lazy.nvim).
+- One file per plugin in `lua/erlend/plugins/`, LSP-related ones in `lua/erlend/plugins/lsp/`. lazy imports both folders, so a new file is picked up without registering it anywhere.
+- `lazy-lock.json` pins plugin versions. Commit it with plugin changes. After removing a plugin file, run `:Lazy clean`.
+- Requires Neovim 0.12+ (nvim-treesitter `main` branch). Use current APIs (`vim.lsp.config`/`vim.lsp.enable`, `vim.uv`, `vim.diagnostic.config`), not deprecated ones.
 
-### Principles
+## Language tooling
+- Language servers and tools: the `mason_tool_installer` list in `lua/erlend/plugins/lsp/mason.lua`. mason-lspconfig's `automatic_enable` starts every Mason-installed server. Exceptions: rust-analyzer comes from rustup and is enabled explicitly in `lspconfig.lua`; Roslyn is started by roslyn.nvim (hence the `roslyn_ls` exclude).
+- Per-server settings: `vim.lsp.config()` in `lua/erlend/plugins/lsp/lspconfig.lua`. LSP keymaps: the `LspAttach` autocmd in `lua/erlend/core/autocmds.lua`.
+- Formatting: conform, per filetype, in `lua/erlend/plugins/formatting.lua`, on save. Filetypes not listed fall back to the language server's formatter.
+- Treesitter parsers: the list in `lua/erlend/plugins/treesitter.lua`.
+- Indentation: 4 spaces for python/lua/c/cpp/rust/go (`autocmds.lua`), 2 otherwise.
 
-1. **Work incrementally, by default.** Plan first, then implement in small steps, checking in before moving to the next one. Show only the relevant piece of a file, not the whole thing. This applies to everything — code, config, docs — unless I explicitly ask for the whole thing at once, in which case just do that.
+## Keymaps
+- A Norwegian `jklø` layout replaces `hjkl` everywhere (Neovim, tmux, copy mode, completion). `K` is remapped, so LSP hover is `gk`. Leader is Space. Check `keymaps.lua` and plugin keymaps for conflicts before adding new ones.
+- tmux prefix is `C-a`. Pane navigation uses vim-tmux-navigator, whose keys must stay in sync between `.tmux.conf` and `keymaps.lua`.
 
-2. **Explain as you go — the why and how, not a one-line label.** Explain every command and every piece of code before running it — including simple or read-only ones — because the goal is for me to learn, not just to avoid mistakes. Cover what it does, why it's the right move, and any side effects — especially anything destructive or hard to reverse — with enough depth that I can catch a problem myself without reading the raw command. Keep it compact, though: cover that substance without padding, repeating yourself, or restating things already established — enough information to learn from, not a wall of text.
+## Machines
+- Used on macOS (Ghostty) and Linux (Ubuntu). Changes must work on both. When behavior differs, detect the OS like existing code does (`vim.fn.has("mac")` in Lua, `if-shell` + `uname` in `.tmux.conf`).
+- Symlinked from `~`: `.zshrc`, `.tmux.conf`, and `claude/global-CLAUDE.md` (as `~/.claude/CLAUDE.md`). Editing them here edits the live config.
+- Copied, not symlinked: `eza/theme.yml`, `lazygit-config.yml`. Re-copy after editing (see README).
+- Machine-specific shell settings go in `~/.zshrc.local` (not tracked), never in `.zshrc`.
+- Never extract or build binaries inside this repo.
 
-3. **Ask instead of assuming.** If something is ambiguous or you're not sure what I want, ask before implementing — especially when a word could mean something destructive (e.g. "move" vs "copy") and getting it wrong would have real consequences. Don't add anything I didn't ask for.
-
-4. **Push back.** Don't just agree — challenge assumptions (mine and your own), and point out flaws, edge cases, or better approaches directly.
-
-5. **Treat this as pair programming.** Give me options and let me choose the direction, check my understanding at decision points, and slow down if I seem confused.
-
-### Code Style Preferences
-
-- **Prefer imports at top of file** - unless there's a specific reason (e.g., avoiding circular imports, lazy loading)
-- **Comments above code, not inline** - place comments on the line above the code they describe, unless inline is clearly cleaner for short annotations
-- **Prioritize readability** - avoid clever one-liners, chained methods, or "fancy" functions when a straightforward approach is clearer
-- **Keep code modular** - break functionality into small, focused functions/modules with single responsibilities
-
-### Git Commit Preferences
-
-- **Never add "Co-Authored-By: Claude" (or similar) to commit messages**
+## Documentation
+- When setup steps, tools, plugins or file locations change, update `README.md`.

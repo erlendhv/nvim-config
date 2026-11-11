@@ -1,4 +1,3 @@
--- File: lua/autocmds.lua
 local indent_group = vim.api.nvim_create_augroup("IndentSettings", { clear = true })
 
 local four_space_languages = { "python", "lua", "c", "cpp", "rust", "go" }
@@ -19,14 +18,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = lsp_group,
 	callback = function(event)
 		local keymap = vim.keymap
-		local client = vim.lsp.get_client_by_id(event.data.client_id)
 		local bufnr = event.buf
-
-		-- Check if the server supports the features we want to map
-		-- This prevents errors if a server doesn't have a specific capability
-		local function has_capability(method)
-			return client and client.supports_method(method)
-		end
 
 		local opts = { buffer = bufnr, silent = true }
 
@@ -62,40 +54,16 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 
 		opts.desc = "Go to previous diagnostic"
-		keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+		keymap.set("n", "[d", function()
+			vim.diagnostic.jump({ count = -1, float = true })
+		end, opts)
 
 		opts.desc = "Go to next diagnostic"
-		keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+		keymap.set("n", "]d", function()
+			vim.diagnostic.jump({ count = 1, float = true })
+		end, opts)
 
 		opts.desc = "Restart LSP"
 		keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
 	end,
 })
-
--- vim.opt.autoread = true
--- vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
--- 	pattern = "*",
--- 	callback = function()
--- 		if vim.fn.mode() ~= "c" then
--- 			vim.cmd("checktime")
--- 		end
--- 	end,
--- })
-
--- vim.opt.autoread = true
---
--- -- Simple test version
--- vim.api.nvim_create_autocmd("FocusGained", {
--- 	callback = function()
--- 		print("Focus gained - checking files") -- Debug message
--- 		vim.cmd("checktime")
--- 	end,
--- })
-
--- vim.opt.autoread = true
---
--- vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
--- 	callback = function()
--- 		vim.cmd("silent! checktime")
--- 	end,
--- })
